@@ -6,64 +6,66 @@ const inputValue = body.querySelector("#input p");
 const equals = body.querySelector("#equals");
 
 
-(function () {
-  // function to listen to events and get value
+let dig1, dig2, sign, store2;
+
+getDigits();
 
 
-    let sign;
-    digitsArray.forEach(element => { element.addEventListener("click", (event) => {
+function getDigits() {
+
+  if (dig1 === undefined || dig1 === null) {
+    digitsArray.forEach(element => {
+      element.addEventListener("click", (event) => {
       const value = event.target.textContent;
-      if (event.target.classList.contains("digits")) {
-        if (outputValue.innerText === "0"){
+      if (event.target.classList.contains("nums")) {
+        if (outputValue.innerText == 0) {
           outputValue.innerText = value;
+          getSign();
+          const [num, sgn] = outputValue.innerText.split(/[\*\+\^\/\%\!\-]/g)
+          dig1 = Number(num);
+          // getSecondDigit();
         }
         else {
-        outputValue.innerText += value;
+          outputValue.innerText += value;
+          getSign();
+          const [num, sgn] = outputValue.innerText.split(/[\*\+\^\/\%\!\-]/g)
+          dig1 = Number(num);
+          // getSecondDigit()
         }
-        } else if (event.target.classList.contains("sign")) {
-            sign = value;
-            outputValue.innerText += value;
-          } else if (event.target.classList.contains("clear")) {
-            outputValue.innerText = 0;
-            inputValue.innerText = ""
-          };
-        }
-    )});
-    
-    if (outputValue.textContent.length === 3) {
-      const [num1, num2] = outputValue.textContent.split(/[\*\+\^\/\%\!\-]/g);
-      const value1 = Number(num1);
-      const value2 = Number(num2);
-      inputValue.textContent = outputValue.textContent;
-      outputValue.textContent = operate(value1, sign, value2);
-    }
+      };
+    })
+  })
+  };
+  // getSecondDigit()
+};
 
-    equals.addEventListener("click", () => {
-      const [num1, num2] = outputValue.textContent.split(/[\*\+\^\/\%\!\-]/g);
-      const value1 = Number(num1);
-      const value2 = Number(num2);
-      inputValue.textContent = outputValue.textContent;
-      outputValue.textContent = operate(value1, sign, value2);
-    });
-    
-    function operate(num1, sign, num2) {
-      switch (sign) {
-        case '+':
-          return num1 + num2;
-        case '-':
-          return num1 - num2;
-        case '*':
-          return num1 * num2;
-        case '/':
-          return num1 / num2;
-        case '!':
-          return factorial(num1);
-        case '^':
-          return exponent(num1, num2);
-        default:
-          return NaN;
-      }
-    };
+function getSecondDigit ()
+{
+  console.log(dig1);
+  if (dig1 !== undefined && (dig2 === undefined || dig2 === null)) {
+    digitsArray.forEach(element => {
+      element.addEventListener("click", (event) => {
+      const value = event.target.textContent;
+      if (event.target.classList.contains("nums")) {
+          store2 = value;
+          outputValue.innerText += value;
+          dig2 = Number(store2);
+        }
+      })
+    })
+  }
+
+}
+
+function getSign() {
+  digitsArray.forEach(element => { element.addEventListener("click", (e) => {
+    if (e.target.classList.contains("sign")) {
+      sign = e.target.textContent;
+      };
+    })
+  });
+};
+
 
   function factorial(num1) {
     if (num1 == 0 || num1 == 1) {
@@ -82,4 +84,35 @@ const equals = body.querySelector("#equals");
         return (num * exponent(num, num2 - 1))
         }
       };
-})();
+
+
+function operate(num1, sign, num2) {
+  switch (sign) {
+    case '+':
+      return num1 + num2;
+    case '-':
+      return num1 - num2;
+    case '*':
+      return num1 * num2;
+    case '/':
+      return num1 / num2;
+    case '!':
+      return factorial(num1);
+    case '^':
+      return exponent(num1, num2);
+    default:
+      return NaN;
+  }
+};
+
+equals.addEventListener("click", () => {
+  const [num1, num2] = outputValue.textContent.split(/[\*\+\^\/\%\!\-]/g);
+  const value1 = Number(dig1);
+  const value2 = Number(dig2);
+  inputValue.textContent = outputValue.textContent;
+  const answer = operate(value1, sign, value2);
+  outputValue.textContent =  answer;
+});
+
+
+// splitTokens()
