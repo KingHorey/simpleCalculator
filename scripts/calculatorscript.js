@@ -5,66 +5,55 @@ const outputValue = body.querySelector("#output p");
 const inputValue = body.querySelector("#input p");
 const equals = body.querySelector("#equals");
 
-
-let dig1, dig2, sign, store2;
-
-getDigits();
+let dig1, dig2, result, sign, num, inputTwo;
 
 
-function getDigits() {
-
-  if (dig1 === undefined || dig1 === null) {
-    digitsArray.forEach(element => {
-      element.addEventListener("click", (event) => {
-      const value = event.target.textContent;
-      if (event.target.classList.contains("nums")) {
-        if (outputValue.innerText == 0) {
-          outputValue.innerText = value;
-          getSign();
-          const [num, sgn] = outputValue.innerText.split(/[\*\+\^\/\%\!\-]/g)
-          dig1 = Number(num);
-          // getSecondDigit();
+(() => {
+  digitsArray.forEach(element => element.addEventListener("click", (event) => {
+    if (event.target.classList.contains("digits"))
+    {
+      if (sign === undefined) {
+        if (dig1 === undefined) {
+          dig1 = event.target.textContent;
         }
         else {
-          outputValue.innerText += value;
-          getSign();
-          const [num, sgn] = outputValue.innerText.split(/[\*\+\^\/\%\!\-]/g)
-          dig1 = Number(num);
-          // getSecondDigit()
+          dig1 += event.target.textContent;
         }
-      };
-    })
-  })
-  };
-  // getSecondDigit()
-};
-
-function getSecondDigit ()
-{
-  console.log(dig1);
-  if (dig1 !== undefined && (dig2 === undefined || dig2 === null)) {
-    digitsArray.forEach(element => {
-      element.addEventListener("click", (event) => {
-      const value = event.target.textContent;
-      if (event.target.classList.contains("nums")) {
-          store2 = value;
-          outputValue.innerText += value;
-          dig2 = Number(store2);
+        inputValue.textContent = dig1;
+      }
+      else if (sign !== undefined && dig1 !== undefined) {
+        if (dig2 === undefined) {
+          dig2 = event.target.textContent;
+          inputValue.textContent += dig2;
         }
-      })
-    })
-  }
-
-}
-
-function getSign() {
-  digitsArray.forEach(element => { element.addEventListener("click", (e) => {
-    if (e.target.classList.contains("sign")) {
-      sign = e.target.textContent;
-      };
-    })
-  });
-};
+        else {
+          dig2 += event.target.textContent;
+          inputValue.textContent += event.target.textContent;
+        }
+    }
+    }
+    else if (event.target.classList.contains("sign")) {
+      if (dig1 !== undefined && dig2 !== undefined) {
+        dig1 = Number(dig1);
+        dig2 = Number(dig2);
+        result = operate(dig1, sign, dig2);
+        outputValue.textContent = result;
+        dig1 = String(result);
+      }
+      else {
+        inputValue.textContent += event.target.textContent;
+        sign = event.target.textContent;
+      }
+    }
+    if (event.target.classList.contains("clear")) {
+      dig1.textContent = "";
+      dig2.textContent = "";
+      sign.textContent = "";
+      inputValue.textContent = "";
+      outputValue.textContent = 0;
+    }
+  }))
+})();
 
 
   function factorial(num1) {
@@ -113,6 +102,3 @@ equals.addEventListener("click", () => {
   const answer = operate(value1, sign, value2);
   outputValue.textContent =  answer;
 });
-
-
-// splitTokens()
