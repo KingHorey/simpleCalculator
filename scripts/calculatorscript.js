@@ -62,6 +62,17 @@ let dig1, dig2, result, sign;
       inputValue.textContent = inputValue.textContent.slice(0, -1);
       [dig1, dig2] = inputValue.textContent.split(/[\*\+\^\/\%\!\-]/g);
     }
+    if (event.target.classList.contains("neg")) {
+      if (dig1 === undefined)
+      {
+        dig1 = "-";
+        inputValue.textContent = "-"
+      }
+      else {
+        dig2 = "-";
+        inputValue.textContent += "-";
+      };
+    }
   }))
 })();
 
